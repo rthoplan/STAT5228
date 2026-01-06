@@ -1,0 +1,247 @@
+import React, { useState } from 'react';
+import { Database, Scissors, Share2, LayoutPanelLeft, GitGraph, AlertTriangle, ChevronRight, Info, CheckCircle2 } from 'lucide-react';
+
+const App = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  const [showDiagnostic, setShowDiagnostic] = useState(false);
+
+  const workflow = [
+    {
+      id: 1,
+      title: "Get Data",
+      icon: <Database className="w-6 h-6" />,
+      color: "bg-blue-600",
+      description: "The starting point where you connect to data sources like Excel, SQL databases, or Web APIs. This is the foundation of your entire project.",
+      jargon: [
+        { term: "Data Source", definition: "The original location where your data is stored (e.g. a CSV file, a cloud database, or a website)." },
+        { term: "Connector", definition: "A specialised 'bridge' Power BI uses to communicate with specific types of software or services." }
+      ]
+    },
+    {
+      id: 2,
+      title: "Transform",
+      subtitle: "Power Query",
+      icon: <Scissors className="w-6 h-6" />,
+      color: "bg-purple-600",
+      isCritical: true,
+      description: "Cleaning and shaping your data before it enters the model. This is often called 'data laundry' or munging.",
+      jargon: [
+        { term: "ETL", definition: "Stands for Extract, Transform, Load. The process of pulling data, tidying it up, and loading it into your report." },
+        { term: "Data Type", definition: "Defining if a column is a Number, Text, or Date. If a Date is incorrectly labelled as Text, you cannot filter by months properly." },
+        { term: "Nulls", definition: "Empty cells in your dataset. In this step, you decide whether to remove them or replace them with default values." }
+      ]
+    },
+    {
+      id: 3,
+      title: "Model",
+      subtitle: "Relationships",
+      icon: <GitGraph className="w-6 h-6" />,
+      color: "bg-indigo-600",
+      isCritical: true,
+      description: "Connecting different tables together so they can interact. A well-modelled report is fast and accurate.",
+      jargon: [
+        { term: "Relationship", definition: "A logical link between two tables based on a shared column (like 'Customer ID')." },
+        { term: "Cardinality", definition: "The nature of the link (e.g. One-to-Many). For instance, one customer can place many different orders." },
+        { term: "Schema", definition: "The visual map or blueprint of all your tables and how they are interconnected." }
+      ]
+    },
+    {
+      id: 4,
+      title: "Visualise",
+      subtitle: "Report",
+      icon: <LayoutPanelLeft className="w-6 h-6" />,
+      color: "bg-teal-600",
+      description: "Creating the actual charts, maps, and graphs that users interact with to find insights.",
+      jargon: [
+        { term: "Canvas", definition: "The main workspace where you drag and drop your visual elements." },
+        { term: "DAX", definition: "Data Analysis Expressions. A formula language (similar to Excel formulas) used to create custom calculations like 'Year-on-Year Growth'." }
+      ]
+    },
+    {
+      id: 5,
+      title: "Share",
+      subtitle: "Optional",
+      icon: <Share2 className="w-6 h-6" />,
+      color: "bg-orange-600",
+      description: "Publishing your report to the Power BI Service (Cloud) so colleagues can view it via the web or mobile apps.",
+      jargon: [
+        { term: "Workspace", definition: "A shared digital folder where a team organises and collaborates on reports." },
+        { term: "Refresh", definition: "Setting a schedule so the report automatically retrieves the latest data from the source." }
+      ]
+    }
+  ];
+
+  const nextStep = () => activeStep < workflow.length - 1 && setActiveStep(activeStep + 1);
+  const prevStep = () => activeStep > 0 && setActiveStep(activeStep - 1);
+
+  return (
+    <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-800">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <header className="mb-8 text-center">
+          <h1 className="text-4xl font-extrabold text-slate-900 mb-2 tracking-tight">Power BI Workflow Explorer</h1>
+          <p className="text-slate-600 text-lg">Master the pipeline from raw data to shared insights.</p>
+        </header>
+
+        {/* Pipeline Progress Bar */}
+        <div className="mb-12 relative px-4">
+          <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-200 -z-10 -translate-y-1/2 hidden md:block"></div>
+          <div className="flex flex-wrap md:flex-nowrap justify-between items-center gap-4">
+            {workflow.map((step, index) => (
+              <button
+                key={step.id}
+                onClick={() => {setActiveStep(index); setShowDiagnostic(false);}}
+                className={`flex flex-col items-center transition-all duration-300 group ${
+                  activeStep === index ? 'scale-110' : 'hover:scale-105'
+                }`}
+              >
+                <div className={`w-12 h-12 flex items-center justify-center rounded-full border-4 transition-all ${
+                  activeStep === index 
+                  ? `${step.color} border-white text-white shadow-xl ring-4 ring-slate-100` 
+                  : index < activeStep 
+                    ? 'bg-green-500 border-white text-white'
+                    : 'bg-white border-slate-200 text-slate-400'
+                }`}>
+                  {index < activeStep ? <CheckCircle2 className="w-6 h-6" /> : step.icon}
+                </div>
+                <span className={`mt-2 text-xs font-bold uppercase tracking-wider ${
+                  activeStep === index ? 'text-slate-900' : 'text-slate-400'
+                }`}>
+                  {step.title}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Content Box */}
+        <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+          <div className="p-8 md:p-12">
+            {showDiagnostic ? (
+              <div className="animate-in fade-in zoom-in-95 duration-300">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="p-3 bg-red-100 rounded-2xl text-red-600">
+                    <AlertTriangle className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-slate-900">Diagnostic Logic</h2>
+                    <p className="text-slate-500 italic">"If visuals look wrong, the cause is usually steps 2 or 3."</p>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-purple-700 font-bold">
+                      <Scissors className="w-5 h-5" />
+                      <h3>Check Step 2: Transform</h3>
+                    </div>
+                    <ul className="space-y-3">
+                      <li className="bg-purple-50 p-4 rounded-xl text-sm border border-purple-100">
+                        <strong>Data Types:</strong> Ensure numbers aren't stored as text. This stops calculations from working.
+                      </li>
+                      <li className="bg-purple-50 p-4 rounded-xl text-sm border border-purple-100">
+                        <strong>Incomplete Cleaning:</strong> Check for hidden symbols or spaces that prevent matching.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-indigo-700 font-bold">
+                      <GitGraph className="w-5 h-5" />
+                      <h3>Check Step 3: Modelling</h3>
+                    </div>
+                    <ul className="space-y-3">
+                      <li className="bg-indigo-50 p-4 rounded-xl text-sm border border-indigo-100">
+                        <strong>Missing Links:</strong> If tables aren't connected by a relationship line, filters won't flow to visuals.
+                      </li>
+                      <li className="bg-indigo-50 p-4 rounded-xl text-sm border border-indigo-100">
+                        <strong>Direction:</strong> Ensure the filter direction allows data to move from your lookup tables to your sales tables.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <button 
+                  onClick={() => setShowDiagnostic(false)}
+                  className="mt-8 w-full bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-slate-800 transition-colors"
+                >
+                  Return to Pipeline
+                </button>
+              </div>
+            ) : (
+              <div className="animate-in slide-in-from-right-4 duration-300">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+                  <div>
+                    <h2 className="text-4xl font-black text-slate-900 mb-1">{workflow[activeStep].title}</h2>
+                    <p className="text-xl text-slate-400 font-medium">{workflow[activeStep].subtitle}</p>
+                  </div>
+                  <button 
+                    onClick={() => setShowDiagnostic(true)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 text-red-600 font-bold text-sm border border-red-100 hover:bg-red-100 transition-colors"
+                  >
+                    <AlertTriangle className="w-4 h-4" />
+                    Visuals look wrong?
+                  </button>
+                </div>
+
+                <p className="text-lg text-slate-600 mb-10 leading-relaxed max-w-2xl">
+                  {workflow[activeStep].description}
+                </p>
+
+                <div className="space-y-6">
+                  <div className="flex items-center gap-2 text-slate-400">
+                    <span className="text-xs font-bold uppercase tracking-widest">Jargon Buster</span>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {workflow[activeStep].jargon.map((item, i) => (
+                      <div key={i} className="p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:shadow-md transition-shadow group">
+                        <h4 className="font-bold text-slate-900 mb-2 flex items-center gap-2">
+                          <div className={`w-2 h-2 rounded-full ${workflow[activeStep].color}`}></div>
+                          {item.term}
+                        </h4>
+                        <p className="text-sm text-slate-500 leading-relaxed">{item.definition}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Footer Controls */}
+                <div className="mt-12 pt-8 border-t border-slate-100 flex items-center justify-between">
+                  <button 
+                    onClick={prevStep}
+                    disabled={activeStep === 0}
+                    className={`px-6 py-3 rounded-xl font-bold transition-all ${
+                      activeStep === 0 ? 'opacity-0 cursor-default' : 'text-slate-400 hover:text-slate-900'
+                    }`}
+                  >
+                    Back
+                  </button>
+                  
+                  {activeStep < workflow.length - 1 ? (
+                    <button 
+                      onClick={nextStep}
+                      className={`flex items-center gap-2 px-8 py-3 rounded-xl text-white font-bold shadow-lg transition-transform hover:scale-105 active:scale-95 ${workflow[activeStep].color}`}
+                    >
+                      Next: {workflow[activeStep + 1].title} <ChevronRight className="w-5 h-5" />
+                    </button>
+                  ) : (
+                    <div className="flex items-center gap-2 text-green-600 font-bold px-8 py-3 bg-green-50 rounded-xl">
+                      <CheckCircle2 className="w-5 h-5" /> Ready to Share
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Methodological Tip */}
+        <p className="mt-8 text-center text-slate-400 text-sm">
+          <strong>Methodology:</strong> Spend 80% of your time on <strong>Transforming</strong> and <strong>Modelling</strong> to ensure your <strong>Visualisation</strong> is effortless.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default App;
