@@ -11,12 +11,10 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <!-- Babel for JSX transformation -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://unpkg.com/lucide-react@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
+        .transition-all { transition: all 0.3s ease; }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -24,17 +22,34 @@
 
     <script type="text/babel">
         const { useState } = React;
-        const { 
-            Database, 
-            Scissors, 
-            Share2, 
-            LayoutPanelLeft, 
-            GitGraph, 
-            AlertTriangle, 
-            ChevronRight, 
-            Info, 
-            CheckCircle2 
-        } = lucide;
+
+        // Custom Inline SVG Icons to avoid external library conflicts
+        const Icons = {
+            Database: ({ size = 24 }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+            ),
+            Scissors: ({ size = 24 }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+            ),
+            GitGraph: ({ size = 24 }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="5" cy="6" r="3"/><path d="M5 9v11"/><circle cx="15" cy="18" r="3"/><path d="M5 15h3a5 5 0 0 1 5 5"/><circle cx="19" cy="6" r="3"/><path d="M19 9v11"/></svg>
+            ),
+            LayoutPanelLeft: ({ size = 24 }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+            ),
+            Share2: ({ size = 24 }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            ),
+            AlertTriangle: ({ size = 24 }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+            ),
+            ChevronRight: ({ size = 24 }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            ),
+            CheckCircle2: ({ size = 24 }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            )
+        };
 
         const App = () => {
             const [activeStep, setActiveStep] = useState(0);
@@ -44,7 +59,7 @@
                 {
                     id: 1,
                     title: "Get Data",
-                    icon: <Database size={24} />,
+                    icon: <Icons.Database size={24} />,
                     color: "bg-blue-600",
                     description: "The starting point where you connect to data sources like Excel, SQL databases, or Web APIs. This is the foundation of your entire project.",
                     jargon: [
@@ -56,7 +71,7 @@
                     id: 2,
                     title: "Transform",
                     subtitle: "Power Query",
-                    icon: <Scissors size={24} />,
+                    icon: <Icons.Scissors size={24} />,
                     color: "bg-purple-600",
                     description: "Cleaning and shaping your data before it enters the model. This is often called 'data laundry' or munging.",
                     jargon: [
@@ -69,7 +84,7 @@
                     id: 3,
                     title: "Model",
                     subtitle: "Relationships",
-                    icon: <GitGraph size={24} />,
+                    icon: <Icons.GitGraph size={24} />,
                     color: "bg-indigo-600",
                     description: "Connecting different tables together so they can interact. A well-modelled report is fast and accurate.",
                     jargon: [
@@ -82,7 +97,7 @@
                     id: 4,
                     title: "Visualise",
                     subtitle: "Report",
-                    icon: <LayoutPanelLeft size={24} />,
+                    icon: <Icons.LayoutPanelLeft size={24} />,
                     color: "bg-teal-600",
                     description: "Creating the actual charts, maps, and graphs that users interact with to find insights.",
                     jargon: [
@@ -94,7 +109,7 @@
                     id: 5,
                     title: "Share",
                     subtitle: "Optional",
-                    icon: <Share2 size={24} />,
+                    icon: <Icons.Share2 size={24} />,
                     color: "bg-orange-600",
                     description: "Publishing your report to the Power BI Service (Cloud) so colleagues can view it via the web or mobile apps.",
                     jargon: [
@@ -131,7 +146,7 @@
                                                 ? 'bg-green-500 border-white text-white'
                                                 : 'bg-white border-slate-200 text-slate-400'
                                         }`}>
-                                            {index < activeStep ? <CheckCircle2 size={24} /> : step.icon}
+                                            {index < activeStep ? <Icons.CheckCircle2 size={24} /> : step.icon}
                                         </div>
                                         <span className={`mt-2 text-xs font-bold uppercase tracking-wider ${activeStep === index ? 'text-slate-900' : 'text-slate-400'}`}>
                                             {step.title}
@@ -146,7 +161,7 @@
                                 {showDiagnostic ? (
                                     <div>
                                         <div className="flex items-center gap-4 mb-6">
-                                            <div className="p-3 bg-red-100 rounded-2xl text-red-600"><AlertTriangle size={32} /></div>
+                                            <div className="p-3 bg-red-100 rounded-2xl text-red-600"><Icons.AlertTriangle size={32} /></div>
                                             <div>
                                                 <h2 className="text-2xl font-bold text-slate-900">Diagnostic Logic</h2>
                                                 <p className="text-slate-500 italic">"If visuals look wrong, the cause is usually steps 2 or 3."</p>
@@ -154,13 +169,13 @@
                                         </div>
                                         <div className="grid md:grid-cols-2 gap-8">
                                             <div className="space-y-4">
-                                                <h3 className="flex items-center gap-2 text-purple-700 font-bold"><Scissors size={20} /> Step 2: Transform</h3>
+                                                <h3 className="flex items-center gap-2 text-purple-700 font-bold"><Icons.Scissors size={20} /> Step 2: Transform</h3>
                                                 <div className="bg-purple-50 p-4 rounded-xl text-sm border border-purple-100">
                                                     <strong>Data Types:</strong> Check if numbers/dates are stored as text.
                                                 </div>
                                             </div>
                                             <div className="space-y-4">
-                                                <h3 className="flex items-center gap-2 text-indigo-700 font-bold"><GitGraph size={20} /> Step 3: Modelling</h3>
+                                                <h3 className="flex items-center gap-2 text-indigo-700 font-bold"><Icons.GitGraph size={20} /> Step 3: Modelling</h3>
                                                 <div className="bg-indigo-50 p-4 rounded-xl text-sm border border-indigo-100">
                                                     <strong>Missing Links:</strong> Check for unconnected tables.
                                                 </div>
@@ -176,7 +191,7 @@
                                                 <p className="text-xl text-slate-400 font-medium">{workflow[activeStep].subtitle}</p>
                                             </div>
                                             <button onClick={() => setShowDiagnostic(true)} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 text-red-600 font-bold text-sm border border-red-100">
-                                                <AlertTriangle size={16} /> Visuals look wrong?
+                                                <Icons.AlertTriangle size={16} /> Visuals look wrong?
                                             </button>
                                         </div>
                                         <p className="text-lg text-slate-600 mb-10 leading-relaxed max-w-2xl">{workflow[activeStep].description}</p>
@@ -192,14 +207,14 @@
                                             ))}
                                         </div>
                                         <div className="mt-12 pt-8 border-t border-slate-100 flex items-center justify-between">
-                                            <button onClick={prevStep} disabled={activeStep === 0} className={`px-6 py-3 rounded-xl font-bold ${activeStep === 0 ? 'opacity-0' : 'text-slate-400'}`}>Back</button>
+                                            <button onClick={prevStep} disabled={activeStep === 0} className={`px-6 py-3 rounded-xl font-bold ${activeStep === 0 ? 'opacity-0' : 'text-slate-400 cursor-pointer'}`}>Back</button>
                                             {activeStep < workflow.length - 1 ? (
-                                                <button onClick={nextStep} className={`flex items-center gap-2 px-8 py-3 rounded-xl text-white font-bold ${workflow[activeStep].color}`}>
-                                                    Next: {workflow[activeStep + 1].title} <ChevronRight size={20} />
+                                                <button onClick={nextStep} className={`flex items-center gap-2 px-8 py-3 rounded-xl text-white font-bold cursor-pointer ${workflow[activeStep].color}`}>
+                                                    Next: {workflow[activeStep + 1].title} <Icons.ChevronRight size={20} />
                                                 </button>
                                             ) : (
                                                 <div className="text-green-600 font-bold px-8 py-3 bg-green-50 rounded-xl flex items-center gap-2">
-                                                    <CheckCircle2 size={20} /> Ready to Share
+                                                    <Icons.CheckCircle2 size={20} /> Ready to Share
                                                 </div>
                                             )}
                                         </div>
