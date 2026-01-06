@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Guide: Getting Started with Power BI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pbi-yellow { background-color: #F2C811; }
+        .pbi-dark { background-color: #333333; }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s;
+        }
+
+        .requirement-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased">
+
+    <!-- Header -->
+    <header class="pbi-dark text-white py-8 px-4 shadow-lg">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="pbi-yellow p-3 rounded-lg">
+                    <i class="fas fa-chart-bar text-black text-3xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold">Power BI for Students</h1>
+                    <p class="text-gray-300">Free Version Installation & Usage Guide</p>
+                </div>
+            </div>
+            <div class="mt-4 md:mt-0">
+                <span class="bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 px-3 py-1 rounded text-sm font-mono">
+                    Updated: Jan 2026
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-8">
+        
+        <!-- Navigation Tabs -->
+        <div class="flex flex-wrap border-b border-gray-200 mb-8 space-x-2 md:space-x-4 overflow-x-auto">
+            <button onclick="showTab('install')" id="tab-install" class="tab-btn py-3 px-4 font-medium border-b-2 border-yellow-500 text-yellow-600 transition-all">
+                <i class="fas fa-download mr-2"></i>1. Installation
+            </button>
+            <button onclick="showTab('account')" id="tab-account" class="tab-btn py-3 px-4 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-all">
+                <i class="fas fa-user-circle mr-2"></i>2. Account Info
+            </button>
+            <button onclick="showTab('service')" id="tab-service" class="tab-btn py-3 px-4 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-all">
+                <i class="fas fa-cloud mr-2"></i>3. PBI Service
+            </button>
+            <button onclick="showTab('limits')" id="tab-limits" class="tab-btn py-3 px-4 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-all">
+                <i class="fas fa-list-check mr-2"></i>4. Capabilities
+            </button>
+            <button onclick="showTab('safety')" id="tab-safety" class="tab-btn py-3 px-4 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-all">
+                <i class="fas fa-shield-alt mr-2"></i>5. Security
+            </button>
+        </div>
+
+        <!-- Section 1: Installation -->
+        <div id="install" class="tab-content active">
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="md:col-span-2 space-y-6">
+                    <section class="card p-6">
+                        <h2 class="text-xl font-bold mb-4 flex items-center">
+                            <i class="fas fa-rocket text-blue-500 mr-2"></i> Choose Your Download Route
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="flex items-start p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+                                <i class="fas fa-store mt-1 mr-4 text-blue-500"></i>
+                                <div>
+                                    <h3 class="font-semibold text-blue-800">Microsoft Store (Recommended)</h3>
+                                    <p class="text-sm text-blue-700">Updates automatically in the background. Best for most students.</p>
+                                    <a href="https://aka.ms/pbidesktopstore" target="_blank" class="inline-block mt-3 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm font-medium">
+                                        Open Microsoft Store <i class="fas fa-external-link-alt ml-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="flex items-start p-4 bg-gray-50 border-l-4 border-gray-400 rounded">
+                                <i class="fas fa-globe mt-1 mr-4 text-gray-600"></i>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Direct Download Page</h3>
+                                    <p class="text-sm text-gray-600">Manual download of the .exe installer. Useful if the Store is blocked.</p>
+                                    <a href="https://www.microsoft.com/en-us/download/details.aspx?id=58494" target="_blank" class="inline-block mt-3 bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-800 text-sm font-medium">
+                                        Visit Download Page <i class="fas fa-external-link-alt ml-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="space-y-6">
+                    <section class="card p-6 bg-yellow-50 border border-yellow-200">
+                        <h2 class="text-lg font-bold mb-4 flex items-center text-yellow-800">
+                            <i class="fas fa-laptop mr-2"></i> System Check
+                        </h2>
+                        <ul class="space-y-3">
+                            <li class="flex items-center text-sm">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i> Windows 10/11 (64-bit)
+                            </li>
+                            <li class="flex items-start text-sm">
+                                <i class="fas fa-times-circle text-red-500 mr-2 mt-1"></i> 
+                                <span><strong>No Native macOS app:</strong> Mac users require a VM (Parallels) or Boot Camp.</span>
+                            </li>
+                            <li class="flex items-center text-sm">
+                                <i class="fas fa-memory text-gray-500 mr-2"></i> Min. 4GB RAM (8GB+ recommended)
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Account Requirement -->
+        <div id="account" class="tab-content">
+            <div class="card p-8 text-center max-w-2xl mx-auto">
+                <div class="mb-6">
+                    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-id-card text-4xl text-gray-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold">Do you need an account?</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-6 border rounded-xl border-green-200 bg-green-50">
+                        <div class="text-green-600 font-bold text-lg mb-1">NO</div>
+                        <p class="text-sm text-green-800">To build reports locally (PBIX files). You can install and use the software for the whole semester offline.</p>
+                    </div>
+                    <div class="p-6 border rounded-xl border-blue-200 bg-blue-50">
+                        <div class="text-blue-600 font-bold text-lg mb-1">YES</div>
+                        <p class="text-sm text-blue-800">To publish reports to the cloud (PBI Service) or collaborate with others via the browser.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: PBI Service -->
+        <div id="service" class="tab-content">
+            <div class="card p-6 mb-6 overflow-hidden">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="flex-1">
+                        <h2 class="text-xl font-bold mb-4">Web Publishing & Sign-up</h2>
+                        <p class="mb-4 text-gray-600">The Power BI Service requires a "Work or School" email address. Microsoft filters out generic consumer domains.</p>
+                        
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                            <h4 class="font-bold text-red-800 mb-1">Generic Emails NOT Allowed:</h4>
+                            <p class="text-sm text-red-700">@gmail.com, @hotmail.com, @outlook.com, @yahoo.com, etc.</p>
+                        </div>
+
+                        <h3 class="font-bold mb-2">Instructions for Students:</h3>
+                        <ol class="list-decimal list-inside space-y-3 text-sm text-gray-700">
+                            <li>Try your <strong>University email</strong> first at <a href="https://powerbi.microsoft.com/" target="_blank" class="text-blue-600 underline">powerbi.microsoft.com</a>.</li>
+                            <li>If your university provides Microsoft 365, you likely already have access.</li>
+                            <li><strong>Can't sign in?</strong> No problem! You can complete Weeks 6–7 100% locally. Publishing is an optional extra if you don't have a qualifying email.</li>
+                        </ol>
+                    </div>
+                    <div class="md:w-64 bg-gray-50 p-6 flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-center">
+                        <div>
+                            <i class="fas fa-envelope-open-text text-5xl text-gray-300 mb-4"></i>
+                            <p class="text-xs text-gray-500 font-medium italic">Check with your IT department if your .edu email is blocked from Office 365 apps.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Capabilities -->
+        <div id="limits" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6 text-center">Power BI "Free" Capability Matrix</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="card p-6 border-t-4 border-green-500">
+                    <h3 class="font-bold text-lg text-green-700 mb-4"><i class="fas fa-check mr-2"></i>What You CAN Do</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-circle-check text-green-500 mt-1 mr-2"></i>
+                            Connect to hundreds of data sources (Excel, Web, SQL).
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-circle-check text-green-500 mt-1 mr-2"></i>
+                            Full Power Query (cleaning) and DAX (formulas) features.
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-circle-check text-green-500 mt-1 mr-2"></i>
+                            Export to PDF or PowerPoint.
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-circle-check text-green-500 mt-1 mr-2"></i>
+                            Create your own "Personal Sandbox" in the cloud.
+                        </li>
+                    </ul>
+                </div>
+                <div class="card p-6 border-t-4 border-red-500">
+                    <h3 class="font-bold text-lg text-red-700 mb-4"><i class="fas fa-ban mr-2"></i>What is Restricted</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-circle-xmark text-red-500 mt-1 mr-2"></i>
+                            Sharing reports with classmates (requires Pro/Premium).
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-circle-xmark text-red-500 mt-1 mr-2"></i>
+                            Consuming content shared by others (unless in Premium Workspace).
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-circle-xmark text-red-500 mt-1 mr-2"></i>
+                            Automated data refresh schedules are limited.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: Security -->
+        <div id="safety" class="tab-content">
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-red-600 text-white p-8 rounded-t-xl">
+                    <h2 class="text-2xl font-bold flex items-center uppercase tracking-wider">
+                        <i class="fas fa-exclamation-triangle mr-4 text-3xl"></i> Warning: Publish to Web
+                    </h2>
+                </div>
+                <div class="card p-8 rounded-t-none border-t-0 border-2 border-red-100">
+                    <p class="text-lg font-semibold text-red-800 mb-4">"Publish to web" (Public) is NOT the same as "Publishing to Service".</p>
+                    <p class="text-gray-700 mb-6">
+                        Microsoft warns that the "Publish to web" feature creates a link that <strong>anyone on the internet</strong> can access. This means:
+                    </p>
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center p-3 bg-red-50 text-red-700 rounded border border-red-200">
+                            <i class="fas fa-eye-slash mr-3"></i> No login required to see the data.
+                        </li>
+                        <div class="flex items-center p-3 bg-red-50 text-red-700 rounded border border-red-200">
+                            <i class="fas fa-search mr-3"></i> Reports can be indexed by search engines.
+                        </li>
+                        <div class="flex items-center p-3 bg-red-50 text-red-700 rounded border border-red-200">
+                            <i class="fas fa-file-export mr-3"></i> All underlying data could potentially be accessible.
+                        </li>
+                    </div>
+                    <div class="bg-gray-100 p-6 rounded-lg text-sm italic text-gray-600">
+                        <h4 class="font-bold text-gray-800 not-italic mb-2 text-base">Best Practice:</h4>
+                        "For our class, keep your data in the PBI Desktop (PBIX) file unless specifically instructed otherwise. Never use 'Publish to Web' with confidential or personal student data."
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="mt-12 py-8 bg-gray-200 border-t border-gray-300">
+        <div class="max-w-5xl mx-auto px-4 text-center text-gray-600 text-sm">
+            <p>Interactive Guide for Week 6-7 Analytics Students</p>
+            <p class="mt-2 text-gray-500">Powered by Microsoft Power BI Desktop & Service documentation.</p>
+        </div>
+    </footer>
+
+    <script>
+        function showTab(tabId) {
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Reset all tab button styles
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-yellow-500', 'text-yellow-600');
+                btn.classList.add('border-transparent', 'text-gray-500');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+
+            // Style active button
+            const activeBtn = document.getElementById('tab-' + tabId);
+            activeBtn.classList.add('border-yellow-500', 'text-yellow-600');
+            activeBtn.classList.remove('border-transparent', 'text-gray-500');
+
+            // Scroll to top of guide smoothly
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
