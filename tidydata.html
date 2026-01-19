@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tidy Data: The Foundation of Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .data-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 0.875rem;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .logic-box {
+            border-left-width: 4px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto">
+        <!-- Header -->
+        <header class="mb-12 text-center">
+            <h1 class="text-4xl font-bold text-slate-900 mb-2">Tidy Data</h1>
+            <p class="text-xl text-slate-600">The layout that makes analysis easy, predictable, and scalable.</p>
+        </header>
+
+        <!-- The Three Rules Section -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold mb-6 flex items-center text-slate-800">
+                <span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">1</span>
+                The Three Core Rules
+            </h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl border border-slate-200 card">
+                    <div class="text-blue-600 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 002-2h-2a2 2 0 002 2" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">Variables as Columns</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Each column is a unique variable. Avoid having multiple columns representing the same attribute (such as "Sales_2022" and "Sales_2023").</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200 card">
+                    <div class="text-blue-600 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">Observations as Rows</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Each row is one specific "event" or "unit." If you measured a person three times, they should have three distinct rows.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200 card">
+                    <div class="text-blue-600 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">One Table per Unit</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Don't mix observational levels. For instance, don't mix "Store Data" (address) with "Transaction Data" (items bought) in one table.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Comparison -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold mb-6 flex items-center text-slate-800">
+                <span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">2</span>
+                Visualising the Difference
+            </h2>
+            
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Untidy -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-red-100">
+                    <h3 class="text-red-600 font-bold mb-4 uppercase tracking-wider text-sm flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                        Untidy (Wide Format)
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>City</th>
+                                    <th class="bg-red-50 text-red-700 font-bold italic">Morning_Temp</th>
+                                    <th class="bg-red-50 text-red-700 font-bold italic">Evening_Temp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>London</td>
+                                    <td>15°C</td>
+                                    <td>12°C</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="mt-4 text-xs text-slate-500">
+                        <strong>The Issue:</strong> Time of day is trapped in column names. To compare temperatures, you'd have to write specific code for "Morning_Temp" and "Evening_Temp" separately.
+                    </p>
+                </div>
+
+                <!-- Tidy -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-green-100">
+                    <h3 class="text-green-600 font-bold mb-4 uppercase tracking-wider text-sm flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        Tidy (Long Format)
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>City</th>
+                                    <th class="bg-green-50 text-green-700 font-bold">Time</th>
+                                    <th class="bg-green-50 text-green-700 font-bold">Temp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>London</td><td>Morning</td><td>15°C</td></tr>
+                                <tr><td>London</td><td>Evening</td><td>12°C</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="mt-4 text-xs text-slate-500">
+                        <strong>The Fix:</strong> Time is now a variable. You can "group by Time" to find the average morning temperature across all cities without extra effort.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Deep Dive: Rule of Thumb Elaboration -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold mb-6 flex items-center text-slate-800">
+                <span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">3</span>
+                Understanding "Special Casing"
+            </h2>
+            
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="p-8">
+                    <h3 class="text-xl font-bold text-slate-900 mb-4 italic">"If you have to name specific data values in your code, it's not tidy."</h3>
+                    <p class="text-slate-600 mb-8 leading-relaxed">
+                        <strong>"Special Casing"</strong> occurs when your data structure forces you to write code that only works for a fixed set of columns. You are treating each column as a "special case" rather than treating a column as a variable that holds many values.
+                    </p>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Example 1 -->
+                        <div class="logic-box border-red-500 bg-red-50 p-6 rounded-r-lg">
+                            <h4 class="font-bold text-red-800 mb-2 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                Special Casing (Manual)
+                            </h4>
+                            <p class="text-sm text-red-900 mb-4">Your code must "know" the names of every month in the headers.</p>
+                            <div class="bg-slate-900 text-slate-300 p-4 rounded font-mono text-xs">
+                                <span class="text-slate-500">// You manually list every "Case"</span><br>
+                                total = data['Jan'] + data['Feb'] + data['Mar']
+                            </div>
+                            <p class="mt-4 text-xs text-red-700 italic">This is "Special Casing" because you are hard-coding 'Jan', 'Feb', and 'Mar'. If 'April' appears, your code is unaware of it.</p>
+                        </div>
+
+                        <!-- Example 2 -->
+                        <div class="logic-box border-green-500 bg-green-50 p-6 rounded-r-lg">
+                            <h4 class="font-bold text-green-800 mb-2 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                General Logic (Automatic)
+                            </h4>
+                            <p class="text-sm text-green-900 mb-4">Your code only needs to know the variable name <code>Revenue</code>.</p>
+                            <div class="bg-slate-900 text-slate-300 p-4 rounded font-mono text-xs">
+                                <span class="text-slate-500">// One rule for all months</span><br>
+                                total = data['Revenue'].sum()
+                            </div>
+                            <p class="mt-4 text-xs text-green-700 italic">This works for any number of months automatically. You are referring to the <b>variable</b> (Revenue), not the <b>data</b> (Jan/Feb/Mar).</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                        <p class="text-sm text-slate-700">
+                            <strong>Summary:</strong> If you find yourself typing <code>column_name_A + column_name_B</code>, you are special casing. If you can type <code>sum(variable_name)</code>, your data is tidy.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why It Helps Section -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold mb-6">Why Tidy Data Helps</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl border border-slate-200">
+                    <h4 class="font-bold mb-3 text-slate-800">Consistent Inputs</h4>
+                    <p class="text-sm text-slate-600">Plotting and modelling functions expect one column to represent one "aesthetic" (e.g., colour or x-axis). Tidy data aligns perfectly with these toolsets.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200">
+                    <h4 class="font-bold mb-3 text-slate-800">Simpler Wrangling</h4>
+                    <p class="text-sm text-slate-600">Grouping, filtering, and aggregating become single-command operations. You no longer need to write complex loops to navigate through headers.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200">
+                    <h4 class="font-bold mb-3 text-slate-800">Reproducible Pipelines</h4>
+                    <p class="text-sm text-slate-600">A tidy pipeline (wrangle → plot → report) is robust. You can update your dataset with new dates or categories, and the analysis will run without modification.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200">
+                    <h4 class="font-bold mb-3 text-slate-800">Fewer One-Off Cases</h4>
+                    <p class="text-sm text-slate-600">By following the three rules, you eliminate the need for "special casing" logic, reducing the number of bugs in your code.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summary Footer -->
+        <footer class="text-center text-slate-500 pb-12 border-t border-slate-200 pt-8">
+            <p>Tidy data isn't just about "neatness"—it's about making your analysis <strong>immune to change</strong>.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
