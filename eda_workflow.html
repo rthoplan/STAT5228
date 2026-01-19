@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDA Workflow Interactive Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .step-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        .active-tab {
+            border-bottom: 3px solid #3b82f6;
+            color: #1d4ed8;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="bg-blue-600 text-white p-2 rounded-lg">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h1 class="text-xl font-bold tracking-tight">EDA Master Workflow</h1>
+            </div>
+            <nav class="hidden md:flex space-x-8 text-sm font-medium text-slate-500">
+                <a href="#workflow" class="hover:text-blue-600 transition">The Workflow</a>
+                <a href="#tips" class="hover:text-blue-600 transition">Practical Tips</a>
+                <a href="#templates" class="hover:text-blue-600 transition">Code Templates</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Hero Section -->
+        <section class="mb-12 text-center py-10">
+            <h2 class="text-4xl font-extrabold text-slate-900 mb-4">EDA Workflow</h2>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                Exploratory Data Analysis isn't just about plotting; it's a systematic cycle of questioning and discovery.
+            </p>
+        </section>
+
+        <!-- 5-Step Workflow -->
+        <section id="workflow" class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-16">
+            <!-- Step 1 -->
+            <div class="step-card bg-white p-6 rounded-2xl border border-slate-200">
+                <div class="text-blue-500 text-2xl mb-4"><i class="fas fa-question-circle"></i></div>
+                <h3 class="font-bold text-lg mb-2 text-slate-900">1. Question</h3>
+                <p class="text-sm text-slate-600">Define the objective. What are we trying to prove or disprove? Identify the target variable early.</p>
+                <div class="mt-4 pt-4 border-t border-slate-100 italic text-xs text-slate-400">
+                    "Is there a correlation between X and Y?"
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-card bg-white p-6 rounded-2xl border border-slate-200">
+                <div class="text-teal-500 text-2xl mb-4"><i class="fas fa-broom"></i></div>
+                <h3 class="font-bold text-lg mb-2 text-slate-900">2. Wrangle</h3>
+                <p class="text-sm text-slate-600">Clean, transform, and reshape. Handle missing values, outliers, and data types to ensure a solid foundation.</p>
+                <div class="mt-4 pt-4 border-t border-slate-100 italic text-xs text-slate-400">
+                    df.dropna(), df.pivot_table()
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-card bg-white p-6 rounded-2xl border border-slate-200">
+                <div class="text-purple-500 text-2xl mb-4"><i class="fas fa-chart-bar"></i></div>
+                <h3 class="font-bold text-lg mb-2 text-slate-900">3. Visualise</h3>
+                <p class="text-sm text-slate-600">Uncover distributions and relationships. Use histograms, scatter plots, and heatmaps to "see" the data.</p>
+                <div class="mt-4 pt-4 border-t border-slate-100 italic text-xs text-slate-400">
+                    sns.pairplot(), px.histogram()
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="step-card bg-white p-6 rounded-2xl border border-slate-200">
+                <div class="text-orange-500 text-2xl mb-4"><i class="fas fa-brain"></i></div>
+                <h3 class="font-bold text-lg mb-2 text-slate-900">4. Model</h3>
+                <p class="text-sm text-slate-600">Draft simple baseline models. Check for feature importance and validate the assumptions made during visualization.</p>
+                <div class="mt-4 pt-4 border-t border-slate-100 italic text-xs text-slate-400">
+                    LinearRegression(), Logit()
+                </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="step-card bg-white p-6 rounded-2xl border border-slate-200">
+                <div class="text-rose-500 text-2xl mb-4"><i class="fas fa-comment-alt"></i></div>
+                <h3 class="font-bold text-lg mb-2 text-slate-900">5. Communicate</h3>
+                <p class="text-sm text-slate-600">Synthesize findings. Transform technical results into actionable insights for stakeholders.</p>
+                <div class="mt-4 pt-4 border-t border-slate-100 italic text-xs text-slate-400">
+                    Executive Summary, Dashboards
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Practical Tips Checklist -->
+            <section id="tips" class="lg:col-span-1">
+                <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl h-full">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-lightbulb text-yellow-400 mr-3"></i> Practical Tips
+                    </h3>
+                    <ul class="space-y-6">
+                        <li class="flex items-start">
+                            <div class="bg-blue-500/20 p-2 rounded mr-4 mt-1"><i class="fas fa-bolt text-blue-400"></i></div>
+                            <div>
+                                <span class="block font-semibold">Start Small & Fast</span>
+                                <span class="text-slate-400 text-sm">Use <code>df.describe()</code> and <code>df.head()</code> before complex functions.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="bg-purple-500/20 p-2 rounded mr-4 mt-1"><i class="fas fa-pencil-alt text-purple-400"></i></div>
+                            <div>
+                                <span class="block font-semibold">Plot Early; Plot Often</span>
+                                <span class="text-slate-400 text-sm">Visualizing data reveals errors and patterns that tables hide.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="bg-rose-500/20 p-2 rounded mr-4 mt-1"><i class="fas fa-sticky-note text-rose-400"></i></div>
+                            <div>
+                                <span class="block font-semibold">Annotate Surprises</span>
+                                <span class="text-slate-400 text-sm">Markdown is your friend. Explain "why" you took a specific cleaning step.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="bg-emerald-500/20 p-2 rounded mr-4 mt-1"><i class="fas fa-lock text-emerald-400"></i></div>
+                            <div>
+                                <span class="block font-semibold">Raw Data is Immutable</span>
+                                <span class="text-slate-400 text-sm">Never overwrite source files. Use <code>df_clean = df.copy()</code>.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="bg-orange-500/20 p-2 rounded mr-4 mt-1"><i class="fas fa-save text-orange-400"></i></div>
+                            <div>
+                                <span class="block font-semibold">Reproducibility First</span>
+                                <span class="text-slate-400 text-sm">Save your seed and environment specs to ensure others get your results.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Interactive Code Playground (Mock) -->
+            <section id="templates" class="lg:col-span-2">
+                <div class="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden h-full">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                        <span class="font-bold text-slate-700">Exploration Script Template</span>
+                        <button onclick="copyCode()" class="text-xs bg-white border border-slate-300 px-3 py-1 rounded-md hover:bg-slate-50 active:scale-95 transition">
+                            <i class="far fa-copy mr-1"></i> Copy to Clipboard
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="code-block" id="template-code">
+<pre>
+# --- 1. QUESTION ---
+# Goal: Identify factors influencing customer churn
+
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# --- 2. WRANGLE (Practical Tip: Keep Raw Immutable) ---
+df_raw = pd.read_csv('data.csv')
+df = df_raw.copy()
+
+# Fast Summaries
+print(df.info())
+print(df.describe())
+
+# Clean
+df['total_spend'] = df['total_spend'].fillna(df['total_spend'].median())
+
+# --- 3. VISUALISE (Practical Tip: Plot Early) ---
+plt.figure(figsize=(10, 6))
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+plt.title("Correlation Matrix - Initial Insight")
+plt.show()
+
+# --- 4. MODEL (Baseline) ---
+# Simple Logistic Regression to find feature weights
+from sklearn.linear_model import LogisticRegression
+# ... logic ...
+
+# --- 5. COMMUNICATE ---
+# "Top 3 drivers of churn are tenure, contract type, and monthly charges."
+</pre>
+                        </div>
+                        <div class="mt-6">
+                            <h4 class="font-bold text-slate-900 mb-2">Pro-Tip for GitHub</h4>
+                            <p class="text-sm text-slate-600 mb-4">
+                                Use <code>.ipynb</code> (Jupyter Notebooks) for the initial exploration phase to keep outputs and charts inline. For the final model, refactor into clean <code>.py</code> scripts.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded font-medium">#Pandas</span>
+                                <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded font-medium">#Seaborn</span>
+                                <span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded font-medium">#EDA</span>
+                                <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded font-medium">#Python</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-400 text-sm">A practical guide to efficient Exploratory Data Analysis. Open-source documentation.</p>
+        </div>
+    </footer>
+
+    <script>
+        function copyCode() {
+            const code = document.getElementById('template-code').innerText;
+            const temp = document.createElement('textarea');
+            temp.value = code;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check text-green-500 mr-1"></i> Copied!';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
