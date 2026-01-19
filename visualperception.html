@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Perception & Chart Design Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Fully Volumetric 3D Bar Chart Styling */
+        .chart-3d-scene {
+            perspective: 1200px;
+            width: 100%;
+            height: 320px;
+            background: #f1f5f9;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .chart-3d-platform {
+            width: 80%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(-30deg) rotateY(35deg);
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding-bottom: 60px;
+            position: relative;
+        }
+
+        .grid-3d-base {
+            position: absolute;
+            width: 150%;
+            height: 200px;
+            background-image: 
+                linear-gradient(#cbd5e1 1px, transparent 1px),
+                linear-gradient(90deg, #cbd5e1 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: rotateX(90deg) translateZ(-40px);
+            opacity: 0.4;
+        }
+
+        .bar-3d-volume {
+            position: relative;
+            width: 40px;
+            transform-style: preserve-3d;
+        }
+
+        .face {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            border: 1px solid rgba(0,0,0,0.15);
+        }
+
+        .face-front { width: 40px; background: #3b82f6; transform: translateZ(20px); }
+        .face-back { width: 40px; background: #1e3a8a; transform: translateZ(-20px) rotateY(180deg); }
+        .face-top { width: 40px; height: 40px; background: #93c5fd; top: 0; transform: rotateX(90deg) translateZ(20px); }
+        .face-bottom { width: 40px; height: 40px; background: #1e3a8a; bottom: 0; transform: rotateX(-90deg) translateZ(0px); }
+        .face-right { width: 40px; height: 100%; background: #1d4ed8; transform: rotateY(90deg) translateZ(20px); }
+        .face-left { width: 40px; height: 100%; background: #2563eb; transform: rotateY(-90deg) translateZ(20px); }
+
+        .color-blind-protanopia { filter: url(#protanopia); }
+        
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+        }
+
+        /* Rainbow/Bad scale */
+        .bad-rainbow {
+            background: linear-gradient(to right, #ef4444, #eab308, #22c55e, #3b82f6, #a855f7);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans pb-24">
+
+    <header class="bg-slate-900 text-white py-16 px-6 text-center shadow-xl">
+        <h1 class="text-4xl font-extrabold mb-4 tracking-tight">The Visual Perception Masterclass</h1>
+        <p class="text-slate-400 max-w-3xl mx-auto text-lg">Comparing "Bad" vs "Good" design patterns to understand human data decoding.</p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 mt-12 space-y-24">
+
+        <!-- NEW SECTION: DESIGN RULES SUMMARY -->
+        <section class="bg-slate-900 text-white rounded-3xl p-10 shadow-2xl overflow-hidden relative">
+            <div class="absolute top-0 right-0 p-8 opacity-10">
+                <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+            </div>
+            <h2 class="text-3xl font-bold mb-8">Practical Design Rules</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
+                <div class="space-y-2">
+                    <h4 class="text-emerald-400 font-bold flex items-center gap-2">
+                        <span class="bg-emerald-400/20 p-1 rounded">01</span> Direct Labeling
+                    </h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">Place labels next to data points. Eliminate the back-and-forth scanning between a legend and the plot.</p>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-emerald-400 font-bold flex items-center gap-2">
+                        <span class="bg-emerald-400/20 p-1 rounded">02</span> Zero Clutter
+                    </h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">Aggressively remove non-data ink. Fewer grid lines, muted borders, and no heavy backgrounds.</p>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-emerald-400 font-bold flex items-center gap-2">
+                        <span class="bg-emerald-400/20 p-1 rounded">03</span> Small Multiples
+                    </h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">Break overloaded charts into a series of simple, consistent plots for easier cross-comparison.</p>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-rose-400 font-bold flex items-center gap-2">
+                        <span class="bg-rose-400/20 p-1 rounded">04</span> Flatten Everything
+                    </h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">Never use 3D or perspective. They distort proportions and make statistical comparison impossible.</p>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-emerald-400 font-bold flex items-center gap-2">
+                        <span class="bg-emerald-400/20 p-1 rounded">05</span> Strategic Color
+                    </h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">Color is for highlighting specific insights, not for decoration. If every bar is a different color, none are special.</p>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-emerald-400 font-bold flex items-center gap-2">
+                        <span class="bg-emerald-400/20 p-1 rounded">06</span> Accessibility First
+                    </h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">Ensure high contrast and colorblind-safe palettes. Use texture or labels as secondary identifiers.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 1: THE HIERARCHY -->
+        <section>
+            <div class="mb-10 border-b border-slate-200 pb-4">
+                <h2 class="text-3xl font-bold">1. Encoding Accuracy (Bad vs. Good)</h2>
+                <p class="text-slate-600 italic">Distortion and volumetric errors in data representation.</p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-12">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+                        <div class="p-6 bg-red-50/50 border-r border-slate-100">
+                            <span class="text-[10px] font-bold text-red-600 uppercase">Bad: Volumetric Ambiguity</span>
+                            <h3 class="text-lg font-bold mb-4">3D Volumetric Cuboids</h3>
+                            <div class="chart-3d-scene">
+                                <div class="chart-3d-platform">
+                                    <div class="grid-3d-base"></div>
+                                    <div class="bar-3d-volume" style="height: 140px;">
+                                        <div class="face face-front" style="height: 140px;"></div><div class="face face-back" style="height: 140px;"></div>
+                                        <div class="face face-right" style="height: 140px;"></div><div class="face face-left" style="height: 140px;"></div>
+                                        <div class="face face-top"></div><div class="face face-bottom"></div>
+                                    </div>
+                                    <div class="bar-3d-volume" style="height: 80px;">
+                                        <div class="face face-front" style="height: 80px;"></div><div class="face face-back" style="height: 80px;"></div>
+                                        <div class="face face-right" style="height: 80px;"></div><div class="face face-left" style="height: 80px;"></div>
+                                        <div class="face face-top"></div><div class="face face-bottom"></div>
+                                    </div>
+                                    <div class="bar-3d-volume" style="height: 170px;">
+                                        <div class="face face-front" style="height: 170px;"></div><div class="face face-back" style="height: 170px;"></div>
+                                        <div class="face face-right" style="height: 170px;"></div><div class="face face-left" style="height: 170px;"></div>
+                                        <div class="face face-top"></div><div class="face face-bottom"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-emerald-50/50">
+                            <span class="text-[10px] font-bold text-emerald-600 uppercase">Good: Accurate 2D</span>
+                            <h3 class="text-lg font-bold mb-4">Standard 2D Bars</h3>
+                            <div class="h-[320px] flex items-end justify-around bg-white rounded-xl border border-emerald-100 px-6 pb-4 relative">
+                                <div class="absolute inset-x-6 top-10 border-b border-slate-100 w-[calc(100%-48px)]"></div>
+                                <div class="absolute inset-x-6 top-24 border-b border-slate-100 w-[calc(100%-48px)]"></div>
+                                <div class="absolute inset-x-6 top-38 border-b border-slate-100 w-[calc(100%-48px)]"></div>
+                                <div class="absolute inset-x-6 top-52 border-b border-slate-100 w-[calc(100%-48px)]"></div>
+                                <div class="w-10 bg-blue-600 h-[140px] z-10"></div>
+                                <div class="w-10 bg-blue-600 h-[80px] z-10"></div>
+                                <div class="w-10 bg-blue-600 h-[170px] z-10"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: COLOR SCALES - BAD VS GOOD -->
+        <section>
+            <div class="mb-10 border-b border-slate-200 pb-4">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h2 class="text-3xl font-bold">2. Statistical Color Logic</h2>
+                        <p class="text-slate-600 italic">How poor color choices mislead the mathematical brain.</p>
+                    </div>
+                    <button onclick="document.body.classList.toggle('color-blind-protanopia')" class="text-xs font-bold bg-slate-900 text-white px-4 py-2 rounded-lg shadow-sm">Toggle Accessibility View</button>
+                </div>
+            </div>
+
+            <div class="space-y-12">
+                
+                <!-- EXAMPLE A: SEQUENTIAL (COUNTS/DENSITY) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="space-y-4">
+                        <span class="text-[10px] font-bold text-red-500 uppercase">❌ Bad: The Rainbow Trap</span>
+                        <h3 class="font-bold">Rainbow Scale for Numbers</h3>
+                        <div class="h-10 bad-rainbow rounded-lg mb-2"></div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            <strong>The Issue:</strong> Rainbow scales (Jet/Spectral) introduce "false boundaries." Yellow appears brighter than Green, making it look like a peak when the data is actually smooth. It fails color-blind users entirely.
+                        </p>
+                    </div>
+                    <div class="space-y-4">
+                        <span class="text-[10px] font-bold text-emerald-500 uppercase">✅ Good: Single-Hue Sequential</span>
+                        <h3 class="font-bold">Lightness Scale for Numbers</h3>
+                        <div class="h-10 bg-gradient-to-r from-blue-50 via-blue-400 to-blue-900 rounded-lg mb-2"></div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            <strong>The Benefit:</strong> Perceptually uniform. The brain naturally understands that "darker = more." This remains interpretable even in grayscale or for color-blind viewers.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- EXAMPLE B: QUALITATIVE (CATEGORIES) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="space-y-4">
+                        <span class="text-[10px] font-bold text-red-500 uppercase">❌ Bad: False Order</span>
+                        <h3 class="font-bold">Gradient for Categories</h3>
+                        <div class="flex h-10 w-full rounded-lg overflow-hidden">
+                            <div class="flex-1 bg-blue-100 flex items-center justify-center text-[8px] font-bold">Dept A</div>
+                            <div class="flex-1 bg-blue-300 flex items-center justify-center text-[8px] font-bold">Dept B</div>
+                            <div class="flex-1 bg-blue-500 flex items-center justify-center text-[8px] font-bold text-white">Dept C</div>
+                            <div class="flex-1 bg-blue-700 flex items-center justify-center text-[8px] font-bold text-white">Dept D</div>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            <strong>The Issue:</strong> Using a single-hue gradient for categories (like Departments) incorrectly implies that Dept D is "greater" or "better" than Dept A. It confuses identity with magnitude.
+                        </p>
+                    </div>
+                    <div class="space-y-4">
+                        <span class="text-[10px] font-bold text-emerald-500 uppercase">✅ Good: Distinct Identity</span>
+                        <h3 class="font-bold">Categorical Hue Palette</h3>
+                        <div class="flex h-10 w-full rounded-lg overflow-hidden gap-1">
+                            <div class="flex-1 bg-rose-500 flex items-center justify-center text-[8px] font-bold text-white rounded">Dept A</div>
+                            <div class="flex-1 bg-amber-400 flex items-center justify-center text-[8px] font-bold rounded">Dept B</div>
+                            <div class="flex-1 bg-indigo-500 flex items-center justify-center text-[8px] font-bold text-white rounded">Dept C</div>
+                            <div class="flex-1 bg-emerald-500 flex items-center justify-center text-[8px] font-bold text-white rounded">Dept D</div>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            <strong>The Benefit:</strong> Clear visual separation. Each hue is distinct, communicating that these are separate entities with no inherent numerical rank.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 3: DIRECT LABELING -->
+        <section>
+            <div class="mb-12 border-b border-slate-200 pb-4">
+                <h2 class="text-3xl font-bold">3. Direct Labeling & Cognitive Load</h2>
+                <p class="text-slate-600 italic">Eliminating the "Legend-to-Chart" scanning cycle.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-2">
+                    <p class="text-xs font-bold text-red-500 uppercase">❌ Bad: High Scanning Effort</p>
+                    <div class="h-48 border border-slate-200 rounded-lg p-6 bg-slate-50 relative flex flex-col">
+                        <svg class="w-full flex-1" viewBox="0 0 200 100" preserveAspectRatio="none">
+                            <path d="M0,80 L40,60 L80,75 L120,30 L160,45 L200,10" stroke="#f43f5e" fill="none" stroke-width="2"/>
+                            <path d="M0,90 L40,85 L80,60 L120,55 L160,20 L200,35" stroke="#8b5cf6" fill="none" stroke-width="2"/>
+                        </svg>
+                        <div class="mt-4 flex gap-4 text-[9px] border-t pt-2 border-slate-200">
+                            <div class="flex items-center gap-1"><div class="w-2 h-2 bg-rose-500"></div> Forecast</div>
+                            <div class="flex items-center gap-1"><div class="w-2 h-2 bg-violet-500"></div> Actual</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-xs font-bold text-emerald-500 uppercase">✅ Good: Minimalist Alignment</p>
+                    <div class="h-48 border border-slate-200 rounded-lg p-6 bg-white relative">
+                        <svg class="w-full h-full" viewBox="0 0 200 100" preserveAspectRatio="none">
+                            <path d="M0,80 L40,60 L80,75 L120,30 L160,45 L180,25" stroke="#334155" fill="none" stroke-width="2"/>
+                            <path d="M0,90 L40,85 L80,60 L120,55 L160,20 L180,30" stroke="#94a3b8" fill="none" stroke-width="2"/>
+                        </svg>
+                        <div class="absolute top-[20px] right-2 text-[10px] font-bold text-slate-700">Forecast</div>
+                        <div class="absolute top-[40px] right-2 text-[10px] font-medium text-slate-400">Actual</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <svg style="display: none;">
+        <filter id="protanopia">
+            <feColorMatrix type="matrix" values="0.567, 0.433, 0, 0, 0 0.558, 0.442, 0, 0, 0 0, 0.242, 0.758, 0, 0 0, 0, 0, 1, 0" />
+        </filter>
+    </svg>
+
+</body>
+</html>
