@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Types: Why They Matter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js for interactivity -->
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .tab-transition { transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased">
+
+    <div class="min-h-screen p-4 md:p-8" x-data="{ 
+        activeSection: 'conceptual', 
+        activeTab: 'categorical',
+        conceptualTypes: {
+            categorical: {
+                title: 'Categorical Data',
+                python: 'Categorical',
+                r: 'Factor',
+                tips: 'Ordinal data allows for median and mode; Nominal only allows for mode.',
+                subtypes: [
+                    { name: 'Nominal', desc: 'No inherent order (e.g., Country, Eye Color, Gender).' },
+                    { name: 'Ordinal', desc: 'Has a logical sequence (e.g., Likert scale: Disagree → Agree).' }
+                ]
+            },
+            numeric: {
+                title: 'Numeric Data',
+                python: 'int64 / float64',
+                r: 'Integer / Numeric',
+                tips: 'Continuous data often requires binning or density estimation for visualization.',
+                subtypes: [
+                    { name: 'Discrete', desc: 'Countable items (e.g., Number of children, website clicks).' },
+                    { name: 'Continuous', desc: 'Infinite possibilities (e.g., Height, Temperature, Price).' }
+                ]
+            },
+            datetime: {
+                title: 'Date & Time',
+                python: 'datetime64[ns]',
+                r: 'POSIXct / Date',
+                tips: 'Watch out for gaps in time series and Time Zone conversions.',
+                subtypes: [
+                    { name: 'Ordered', desc: 'Chronological sequence is the primary axis.' },
+                    { name: 'Seasonal', desc: 'Periodic patterns (Day of week, Month of year).' }
+                ]
+            },
+            text: {
+                title: 'Text (String)',
+                python: 'object / str',
+                r: 'Character',
+                tips: 'Requires heavy preprocessing like lowercasing and stop-word removal.',
+                subtypes: [
+                    { name: 'Unstructured', desc: 'Reviews, tweets, open-ended feedback.' },
+                    { name: 'Semi-structured', desc: 'Log files, JSON strings, XML tags.' }
+                ]
+            },
+            spatial: {
+                title: 'Spatial Data',
+                python: 'GeoSeries',
+                r: 'sf (Simple Features)',
+                tips: 'Coordinate Reference Systems (CRS) change distance and area calculations.',
+                subtypes: [
+                    { name: 'Coordinates', desc: 'Latitude/Longitude (Point data).' },
+                    { name: 'Regions', desc: 'Polygons/Shapes (Borders, Census tracts).' }
+                ]
+            }
+        }
+    }">
+        <div class="max-w-5xl mx-auto">
+            
+            <!-- Header -->
+            <header class="mb-12 text-center">
+                <h1 class="text-4xl font-extrabold tracking-tight text-slate-900 mb-4">
+                    Data Types: <span class="text-blue-600">Why They Matter</span>
+                </h1>
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                    Choosing the right data type defines which questions you can ask and which statistical answers are valid.
+                </p>
+            </header>
+
+            <!-- Navigation Buttons -->
+            <div class="flex flex-wrap justify-center gap-3 mb-8">
+                <button 
+                    @click="activeSection = 'conceptual'"
+                    :class="activeSection === 'conceptual' ? 'bg-blue-600 text-white shadow-lg' : 'bg-white text-slate-600 hover:bg-slate-100'"
+                    class="px-6 py-2 rounded-full font-medium transition-all border border-transparent shadow-sm">
+                    Conceptual Types
+                </button>
+                <button 
+                    @click="activeSection = 'implications'"
+                    :class="activeSection === 'implications' ? 'bg-blue-600 text-white shadow-lg' : 'bg-white text-slate-600 hover:bg-slate-100'"
+                    class="px-6 py-2 rounded-full font-medium transition-all border border-transparent shadow-sm">
+                    What Changes?
+                </button>
+                <button 
+                    @click="activeSection = 'ecosystem'"
+                    :class="activeSection === 'ecosystem' ? 'bg-blue-600 text-white shadow-lg' : 'bg-white text-slate-600 hover:bg-slate-100'"
+                    class="px-6 py-2 rounded-full font-medium transition-all border border-transparent shadow-sm">
+                    Python vs R
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden min-h-[500px]">
+                
+                <!-- SECTION 1: CONCEPTUAL TYPES -->
+                <template x-if="activeSection === 'conceptual'">
+                    <div class="grid grid-cols-1 md:grid-cols-3 h-full">
+                        <!-- Sidebar -->
+                        <div class="p-6 border-r border-slate-100 bg-slate-50/50">
+                            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Select Category</h3>
+                            <div class="space-y-2">
+                                <template x-for="(data, key) in conceptualTypes" :key="key">
+                                    <button
+                                        @click="activeTab = key"
+                                        :class="activeTab === key ? 'bg-white shadow-md text-blue-600 border-slate-200' : 'text-slate-600 hover:bg-white/50 border-transparent'"
+                                        class="w-full flex items-center p-4 rounded-xl transition-all border font-semibold">
+                                        <span class="capitalize" x-text="key"></span>
+                                        <svg x-show="activeTab === key" class="ml-auto w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                        <!-- Details -->
+                        <div class="md:col-span-2 p-8" x-transition>
+                            <div class="flex items-center mb-6">
+                                <div class="p-3 bg-blue-100 text-blue-600 rounded-2xl mr-4">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+                                </div>
+                                <h2 class="text-2xl font-bold" x-text="conceptualTypes[activeTab].title"></h2>
+                            </div>
+                            
+                            <div class="space-y-6">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <template x-for="sub in conceptualTypes[activeTab].subtypes">
+                                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                                            <h4 class="font-bold text-blue-700 mb-1" x-text="sub.name"></h4>
+                                            <p class="text-sm text-slate-600 leading-relaxed" x-text="sub.desc"></p>
+                                        </div>
+                                    </template>
+                                </div>
+                                
+                                <div class="bg-amber-50 border border-amber-100 p-4 rounded-xl">
+                                    <h4 class="text-amber-800 font-bold text-sm mb-1 flex items-center">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        Data Scientist's Tip
+                                    </h4>
+                                    <p class="text-sm text-amber-700 italic" x-text="conceptualTypes[activeTab].tips"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- SECTION 2: IMPLICATIONS -->
+                <template x-if="activeSection === 'implications'">
+                    <div class="p-8">
+                        <h2 class="text-2xl font-bold mb-8 text-center">How Data Type Dictates Your Analysis</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="flex p-6 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-lg transition-all duration-300">
+                                <div class="mr-4 text-blue-500">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg mb-2">Summary Statistics</h3>
+                                    <p class="text-slate-600 text-sm leading-relaxed">You can't calculate the 'average' of a list of countries. Categorical data uses frequencies; Numeric uses mean/median and variance.</p>
+                                </div>
+                            </div>
+                            <div class="flex p-6 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-lg transition-all duration-300">
+                                <div class="mr-4 text-purple-500">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg mb-2">Appropriate Plots</h3>
+                                    <p class="text-slate-600 text-sm leading-relaxed">Histograms/Boxplots for numeric data. Bar charts/Pie charts for categorical data. Mixing them leads to Violin or Ridge plots.</p>
+                                </div>
+                            </div>
+                            <div class="flex p-6 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-lg transition-all duration-300">
+                                <div class="mr-4 text-green-500">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg mb-2">Valid Operations</h3>
+                                    <p class="text-slate-600 text-sm leading-relaxed">Multiplying 'Age' by 2 makes sense. Multiplying 'Zip Code' by 2 is mathematically possible but logically meaningless.</p>
+                                </div>
+                            </div>
+                            <div class="flex p-6 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-lg transition-all duration-300">
+                                <div class="mr-4 text-amber-500">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg mb-2">Missingness</h3>
+                                    <p class="text-slate-600 text-sm leading-relaxed">Numeric missingness is usually NaN. Text might be ''. Survey data often uses coded placeholders like '-99' which must be handled.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- SECTION 3: ECOSYSTEM COMPARISON -->
+                <template x-if="activeSection === 'ecosystem'">
+                    <div class="p-8">
+                        <h2 class="text-2xl font-bold mb-8 text-center">Naming Conventions: Python vs R</h2>
+                        <div class="overflow-x-auto mb-8">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-100 text-slate-600 uppercase text-xs font-bold tracking-widest">
+                                        <th class="p-4 text-left rounded-tl-xl">Conceptual Category</th>
+                                        <th class="p-4 text-left">Python (Pandas)</th>
+                                        <th class="p-4 text-left rounded-tr-xl">R (Base/Tidyverse)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <template x-for="(data, key) in conceptualTypes" :key="key">
+                                        <tr class="hover:bg-slate-50 transition-colors">
+                                            <td class="p-4 font-bold capitalize" x-text="key"></td>
+                                            <td class="p-4 font-mono text-sm text-blue-600" x-text="data.python"></td>
+                                            <td class="p-4 font-mono text-sm text-purple-600" x-text="data.r"></td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="p-6 bg-blue-50 rounded-2xl border border-blue-100">
+                                <h4 class="font-bold text-blue-900 mb-2 flex items-center">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                                    The Python Approach
+                                </h4>
+                                <p class="text-sm text-blue-800 leading-relaxed">
+                                    Strings default to <strong>object</strong>. You must explicitly cast to <strong>category</strong> for efficiency. Pandas uses NumPy types (int64, float64) for precise memory control.
+                                </p>
+                            </div>
+                            <div class="p-6 bg-purple-50 rounded-2xl border border-purple-100">
+                                <h4 class="font-bold text-purple-900 mb-2 flex items-center">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                                    The R Approach
+                                </h4>
+                                <p class="text-sm text-purple-800 leading-relaxed">
+                                    Distinguishes strictly between <strong>Factor</strong> (categories) and <strong>Character</strong> (raw text). Factors store categories as integers for modeling efficiency.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+            </div>
+
+            <!-- Footer -->
+            <footer class="mt-12 text-center text-slate-400 text-sm">
+                <p>Interactive Data Types Guide &copy; 2024</p>
+                <p class="mt-2">Built with Tailwind CSS & Alpine.js</p>
+            </footer>
+        </div>
+    </div>
+
+</body>
+</html>
