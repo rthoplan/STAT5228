@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tidy vs Messy Data Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .data-cell { transition: all 0.3s ease; }
+        .pivot-arrow { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .rotated { transform: rotate(180deg); }
+        @keyframes flow {
+            0% { opacity: 0; transform: translateY(-10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-flow { animation: flow 0.5s ease forwards; }
+        
+        /* New Pulse for clarity */
+        @keyframes pulse-subtle {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        .click-hint { animation: pulse-subtle 2s infinite ease-in-out; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen font-sans">
+
+    <div class="max-w-5xl mx-auto px-4 py-12">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold text-slate-800 mb-4 tracking-tight">Tidy vs. Messy Data</h1>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto">Reshaping is a core EDA skill. Transform wide datasets into "long" (tidy) formats to make analysis and visualization easier.</p>
+        </header>
+
+        <!-- Toggle Switch -->
+        <div class="flex flex-col items-center mb-12">
+            <div class="bg-white p-1.5 rounded-xl shadow-md border border-slate-200 flex mb-4 relative z-10">
+                <button id="btnWide" class="px-8 py-3 rounded-lg font-bold transition-all bg-blue-600 text-white shadow-lg transform active:scale-95">Wide Format (Messy)</button>
+                <button id="btnLong" class="px-8 py-3 rounded-lg font-bold transition-all text-slate-500 hover:bg-slate-50 active:scale-95">Long Format (Tidy)</button>
+            </div>
+            
+            <div id="transformTrigger" class="flex flex-col items-center gap-2 cursor-pointer group" title="Click to pivot data">
+                <span class="text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-blue-500 transition-colors">Click buttons to Pivot</span>
+                <svg id="pivotIcon" class="w-10 h-10 pivot-arrow text-blue-500 click-hint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            
+            <!-- Table Container -->
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+                <div id="tableHeader" class="bg-slate-800 p-4 text-white font-mono text-sm flex justify-between items-center transition-colors duration-500">
+                    <span id="formatLabel" class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                        CURRENT: WIDE_FORMAT
+                    </span>
+                    <span class="opacity-50">data_reshape.csv</span>
+                </div>
+                <div class="p-6 overflow-x-auto">
+                    <table id="dataTable" class="w-full text-left border-collapse">
+                        <!-- Content injected by JS -->
+                    </table>
+                </div>
+            </div>
+
+            <!-- Insights Panel -->
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-md border-l-4 border-blue-500">
+                    <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM5.884 6.98a1 1 0 00-1.458-1.366l-.707.707a1 1 0 001.366 1.458l.707-.707zM14.505 6.273a1 1 0 111.366 1.458l-.707.707a1 1 0 01-1.366-1.458l.707-.707zM5 10a1 1 0 100 2h1a1 1 0 100-2H5zM14 10a1 1 0 100 2h1a1 1 0 100-2h-1zM6.637 14.116a1 1 0 011.458 1.366l-.707.707a1 1 0 01-1.366-1.458l.707-.707zM14.823 15.525a1 1 0 00-1.458-1.366l-.707.707a1 1 0 001.366 1.458l.707-.707zM10 14a1 1 0 100 2v1a1 1 0 100-2v-1z"></path></svg>
+                        Why Reshape?
+                    </h3>
+                    <p id="explanationText" class="text-slate-600 text-sm leading-relaxed">
+                        In the <strong>Wide Format</strong>, variables (Q1, Q2...) are spread across columns. While easy to read for humans, it's hard for computers to group or plot.
+                    </p>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-2xl shadow-md text-slate-300">
+                    <h3 class="font-bold text-white text-lg mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                        Reshape Tools
+                    </h3>
+                    <div class="space-y-4 font-mono text-xs">
+                        <div>
+                            <span class="text-blue-400 font-bold block mb-1">Python (pandas)</span>
+                            <div class="bg-slate-900 p-3 rounded-lg border border-slate-700">
+                                df.melt(id_vars='store', var_name='quarter', value_name='sales')
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-emerald-400 font-bold block mb-1">R (tidyr)</span>
+                            <div class="bg-slate-900 p-3 rounded-lg border border-slate-700">
+                                df %>% pivot_longer(cols = Q1:Q4, names_to = "quarter", values_to = "sales")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 p-6 bg-blue-50 rounded-2xl border border-blue-100">
+            <h4 class="font-bold text-blue-800 mb-2 uppercase text-xs tracking-widest">The Tidy Data Principles</h4>
+            <ul class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-blue-700">
+                <li class="flex items-start gap-2 italic"><span>1.</span> Each variable forms a column.</li>
+                <li class="flex items-start gap-2 italic"><span>2.</span> Each observation forms a row.</li>
+                <li class="flex items-start gap-2 italic"><span>3.</span> Each type of observational unit forms a table.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const wideData = [
+            { store: 'A', Q1: 12, Q2: 14, Q3: 13, Q4: 15 },
+            { store: 'B', Q1: 8, Q2: 9, Q3: 11, Q4: 10 }
+        ];
+
+        const longData = [
+            { store: 'A', quarter: 'Q1', sales: 12 },
+            { store: 'A', quarter: 'Q2', sales: 14 },
+            { store: 'A', quarter: 'Q3', sales: 13 },
+            { store: 'A', quarter: 'Q4', sales: 15 },
+            { store: 'B', quarter: 'Q1', sales: 8 },
+            { store: 'B', quarter: 'Q2', sales: 9 },
+            { store: 'B', quarter: 'Q3', sales: 11 },
+            { store: 'B', quarter: 'Q4', sales: 10 }
+        ];
+
+        const btnWide = document.getElementById('btnWide');
+        const btnLong = document.getElementById('btnLong');
+        const pivotIcon = document.getElementById('pivotIcon');
+        const table = document.getElementById('dataTable');
+        const tableHeader = document.getElementById('tableHeader');
+        const formatLabel = document.getElementById('formatLabel');
+        const explanationText = document.getElementById('explanationText');
+
+        let currentMode = 'wide';
+
+        function renderTable(mode) {
+            table.innerHTML = '';
+            const data = mode === 'wide' ? wideData : longData;
+            const headers = Object.keys(data[0]);
+
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            headers.forEach(h => {
+                const th = document.createElement('th');
+                th.className = "p-3 border-b-2 border-slate-100 text-slate-500 uppercase text-xs tracking-wider font-black";
+                th.textContent = h;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+            data.forEach((row, i) => {
+                const tr = document.createElement('tr');
+                tr.className = "animate-flow";
+                tr.style.animationDelay = `${i * 0.03}s`;
+                
+                headers.forEach(h => {
+                    const td = document.createElement('td');
+                    td.className = `p-3 border-b border-slate-50 data-cell font-medium ${h === 'store' ? 'text-slate-400' : 'text-slate-800'}`;
+                    td.textContent = row[h];
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+        }
+
+        function toggleMode(mode) {
+            if (currentMode === mode) return;
+            currentMode = mode;
+            
+            if (mode === 'wide') {
+                btnWide.className = "px-8 py-3 rounded-lg font-bold transition-all bg-blue-600 text-white shadow-lg transform active:scale-95";
+                btnLong.className = "px-8 py-3 rounded-lg font-bold transition-all text-slate-500 hover:bg-slate-50 active:scale-95";
+                pivotIcon.classList.remove('rotated');
+                pivotIcon.classList.replace('text-emerald-500', 'text-blue-500');
+                tableHeader.classList.replace('bg-emerald-900', 'bg-slate-800');
+                formatLabel.innerHTML = `<span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span> CURRENT: WIDE_FORMAT (MESSY)`;
+                explanationText.innerHTML = "In <strong>Wide Format</strong>, variables (Q1, Q2...) are spread across columns. While easy to read for humans, it's hard for computers to group or plot over time because the 'Quarter' variable is trapped in the column headers.";
+            } else {
+                btnLong.className = "px-8 py-3 rounded-lg font-bold transition-all bg-emerald-500 text-white shadow-lg transform active:scale-95";
+                btnWide.className = "px-8 py-3 rounded-lg font-bold transition-all text-slate-500 hover:bg-slate-50 active:scale-95";
+                pivotIcon.classList.add('rotated');
+                pivotIcon.classList.replace('text-blue-500', 'text-emerald-500');
+                tableHeader.classList.replace('bg-slate-800', 'bg-emerald-900');
+                formatLabel.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> CURRENT: LONG_FORMAT (TIDY)`;
+                explanationText.innerHTML = "The <strong>Long Format</strong> (Tidy) puts every variable in its own column. Now, 'Quarter' is a variable we can filter by, and 'Sales' is a single column we can easily average, sum, or plot as a line chart.";
+            }
+            
+            renderTable(mode);
+        }
+
+        btnWide.addEventListener('click', () => toggleMode('wide'));
+        btnLong.addEventListener('click', () => toggleMode('long'));
+        
+        // Make the arrow area also toggle for better accessibility
+        document.getElementById('transformTrigger').addEventListener('click', () => {
+            toggleMode(currentMode === 'wide' ? 'long' : 'wide');
+        });
+
+        // Initial render
+        renderTable('wide');
+    </script>
+</body>
+</html>
